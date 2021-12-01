@@ -1,7 +1,12 @@
 import markdown2
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django import forms    
 
 from . import util
+
+class NewEntryForm(forms.Form):
+    title = forms.CharField(label="Title")
+    content = forms.CharField(label="content", widget = forms.Textarea)
 
 
 def index(request):
@@ -43,4 +48,9 @@ def search(request):
     # Returns search page with all the results
     return render(request, "encyclopedia/search.html", {
         "results": results
+    })
+
+def new_page(request):
+    return render(request, "encyclopedia/new_page.html", {
+        "form": NewEntryForm()
     })
