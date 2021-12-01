@@ -10,7 +10,11 @@ def index(request):
     })
 
 def entry(request, page):
-    return render(request, "encyclopedia/entry.html", {
+    if util.get_entry(page) == None:
+        return render(request, "encyclopedia/error.html")
+
+    else:
+        return render(request, "encyclopedia/entry.html", {
         # Converts markdown to html
         "entry": markdown2.markdown(util.get_entry(page)),
         "title": page
