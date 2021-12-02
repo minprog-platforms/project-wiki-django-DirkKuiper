@@ -5,8 +5,12 @@
 {% endblock %}
 
 {% block body %}
-
+    <!-- Displays error message in case user inputs already existing entry -->
+    <h3>{{ error }}</h3>
+    
     <h1>Create New Page:</h1>
+
+    <!-- Creates form for user input for new entry -->
     <form action="{% url 'new_page' %}" method="post">
         {% csrf_token %}
         {{ form }}

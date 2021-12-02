@@ -1,6 +1,6 @@
 import markdown2
 from django.shortcuts import render
-from django import forms    
+from django import forms
 
 from . import util
 
@@ -51,6 +51,34 @@ def search(request):
     })
 
 def new_page(request):
-    return render(request, "encyclopedia/new_page.html", {
-        "form": NewEntryForm()
-    })
+    # Checks if user submitted a form on the page
+    if request.method == "POST":
+        
+        # Fetches the form
+        form = NewEntryForm(request.POST)
+
+        # If form is valid, takes data from form and saves it
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+
+            # Checks if entry is already present in list with all entries
+            if title in util.list_entries():
+                # In case entry already exists, returns the same page, but with an error message that tells the user entry already exists
+                return render(request, "encyclopedia/new_page.html", {
+                    "form": NewEntryForm(),
+                    "error": "Error! This entry already exists, please try again!"
+                })
+
+            else:
+                # Saves the entry
+                util.save_entry(title, content)
+                # Renders newly created page
+                return render(request, "encyclopedia/entry.html", {
+                    "entry": markdown2.markdown(util.get_entry(title)),
+                    "title": title
+                    })
+    else:
+        return render(request, "encyclopedia/new_page.html", {
+                    "form": NewEntryForm()
+                })

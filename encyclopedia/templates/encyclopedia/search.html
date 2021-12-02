@@ -1,12 +1,13 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    search results
+    Search results
 {% endblock %}
 
 {% block body %}
     <h1>Search results</h1>
 
+    <!-- Prints out all search results and creates links to corresponding pages -->
     <ul>
     {% for result in results %}
         <li><a href="{% url 'entry' result %}">{{ result }}</a></li>
